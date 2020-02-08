@@ -17,11 +17,15 @@ class MoviesController < ApplicationController
 
     if @ratings.nil?
       @ratings = session[:ratings]
-      redir1 = true
+      if @ratings != params[:ratings]
+        redir1 = true
+      end
     end
     if @sort.nil?
       @sort = session[:sort]
-      redir2 = true
+      if @sort != params[:sort]
+        redir2 = true
+      end
     end
 
     if @ratings.nil?
@@ -30,7 +34,7 @@ class MoviesController < ApplicationController
       @movies = Movie.where({rating: @ratings.keys}).order(@sort)
     end
 
-    if redir1 && redir2
+    if redir1 || redir2
       flash.keep
       redirect_to movies_path ratings: @ratings, sort: @sort
     end
